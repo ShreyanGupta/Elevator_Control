@@ -13,7 +13,14 @@
 struct state_vars{
 	float Q[4][4];
 	int num_actions[4][4];
+	
 	state_vars(int);
+	void validate_actions(int s);
+	void constraint_base_flr(int s);
+	void constraint_top_flr(int s);
+	void constraint_open_lift(int s);
+	void constraint_move_up_lift(int s);
+	void constraint_move_down_lift(int s);
 };
 
 #endif
