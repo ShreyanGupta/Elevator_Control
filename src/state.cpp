@@ -43,8 +43,16 @@ inline int pos_lift1(state s){
 	return (s & (1 << 3 - 1));
 }
 
+inline int floor_lift1(state s){
+	return (1 << pos_lift1(s));
+}
+
 inline int pos_lift2(state s){
 	return ((s >> 3) & (1 << 3 - 1));
+}
+
+inline int floor_lift2(state s){
+	return (1 << pos_lift2(s));
 }
 
 inline int button_lift1(state s){
@@ -62,4 +70,9 @@ inline int floor_up(state s){
 inline int floor_down(state s){
 	return ((s >> 21) & (1 << 5 - 1));
 }
+
+inline int floor_up_down(state s){
+	return (floor_up(s) | floor_down(s));
+}
+
 
