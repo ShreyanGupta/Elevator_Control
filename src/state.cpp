@@ -1,78 +1,66 @@
-#include "header.h"
+#include "state.h"
 
-// 32 bits
-//    G     F     E     D     C    B   A
-// ------|-----|-----|-----|-----|---|---
-// 31  26 25 21 20 16 15 11 10  6 5 3 2 0
-
-// A (3) -> Lift 1 pos
-// B (3) -> Lift 2 pos
-// C (5) -> Buttons pressed on Lift 1
-// D (5) -> Buttons pressed on Lift 2
-// E (5) -> Up button pressed on Floors
-// F (5) -> Down button pressed on Floors
-
-// ******************** ACTIONS ON STATES
-
-inline state lift_up(int lift_no, state s){
-	if(lift_no == 1) return s+1;
-	else return s+8;
+string to_bin(int n){
+	string r;
+	for(int i=0; i<5; ++i){
+		if(n%2 == 1) r += "1";
+		else r += "0";
+		n/=2;
+	}
+	return r;
+}
+void print(state s){
+	cout << "L1: " << pos_lift1(s);
+	cout << " L2: " << pos_lift2(s);
+	cout << " BL1: " << to_bin(button_lift1(s));
+	cout << " BL2: " << to_bin(button_lift2(s));
+	cout << " FU: " << to_bin(floor_up(s));
+	cout << " FD: " << to_bin(floor_down(s)) << endl;
 }
 
-inline state lift_down(int lift_no, state s){
-	if(lift_no == 1) return s-1;
-	else return s-8;
+void update_state(string s, state &st){
+	if(s[0] == '0') return;
+	if(s[0] == 'A'){
+		switch(s[1]){
+			case 'U' : {
+				action_lift_up(stoi(s.substr(2)), st);
+				break;
+			}
+			case 'D' : {
+				action_lift_down(stoi(s.substr(2)), st);
+				break;
+			}
+			case 'O' : {
+				if(s[2] == 'U') action_lift_open_up(stoi(s.substr(3)), st);
+				else action_lift_open_down(stoi(s.substr(3)), st);
+				break;
+			}
+		}
+	}
+	else if(s[0] == 'B'){
+		switch(s[1]){
+			case 'U' : {
+				observation_floor_up(stoi(s.substr(3)), st);
+				break;
+			}
+			case 'D' : {
+				observation_floor_down(stoi(s.substr(3)), st);
+				break;
+			}
+			default : {
+				auto pos1 = s.find('_') + 1;
+				auto pos2 = s.find('_', pos1);
+				observation_lift_press(stoi(s.substr(pos2+1)), stoi(s.substr(pos1, pos2-pos1)), st);
+				break;
+			}
+		}
+	}
 }
 
-inline state floor_up(int flr, state s){
-	return s | (1 << (16 + (1 << flr)));
+state_vars &map(state &s){
+	auto itr = m.find(s);
+	if(itr == m.end()){
+		itr = m.insert(make_pair(s, state_vars(s))).first;
+	}
+	return itr->second;
 }
-
-inline state floor_down(int flr, state s){
-	return s | (1 << (21 + (1 << flr)));
-}
-
-inline state lift_press(int lift_no, int flr){
-	if(lift_no == 1) return s | (1 << (6 + (1 << flr)));
-	else return s | (1 << (11 + (1 << flr)));
-}
-
-// ********************* ACCESSING DATA
-
-inline int pos_lift1(state s){
-	return (s & (1 << 3 - 1));
-}
-
-inline int floor_lift1(state s){
-	return (1 << pos_lift1(s));
-}
-
-inline int pos_lift2(state s){
-	return ((s >> 3) & (1 << 3 - 1));
-}
-
-inline int floor_lift2(state s){
-	return (1 << pos_lift2(s));
-}
-
-inline int button_lift1(state s){
-	return ((s >> 6) & (1 << 5 - 1));
-}
-
-inline int button_lift2(state s){
-	return ((s >> 11) & (1 << 5 - 1));
-}
-
-inline int floor_up(state s){
-	return ((s >> 16) & (1 << 5 - 1));
-}
-
-inline int floor_down(state s){
-	return ((s >> 21) & (1 << 5 - 1));
-}
-
-inline int floor_up_down(state s){
-	return (floor_up(s) | floor_down(s));
-}
-
-

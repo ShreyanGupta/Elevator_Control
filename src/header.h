@@ -5,17 +5,17 @@
 #include <vector>
 #include <unordered_map>
 
+#include "state_vars.h"
+
 using namespace std;
 
 typedef int state;
 
-extern int top_floor;
 extern const float INVALID;
+extern int N, K;
+extern float p, q, r, t;
+extern unordered_map<state, state_vars> m;
 
-state lift_up(int lift_no, state s);
-state lift_down(int lift_no, state s);
-state floor_up(int flr, state s);
-state floor_down(int flr, state s);
-state lift_press(int lift_no, int flr);
+state_vars &map(state &s);
 
 #endif
