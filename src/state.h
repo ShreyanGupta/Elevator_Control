@@ -51,7 +51,6 @@ inline void action_lift_down(int lift_no, state &s){
 	else s -= 8;
 }
 
-// to be checked properly
 inline void action_lift_open_up(int lift_no, state &s){
 	if(lift_no == 1){
 		s &= ~(floor_lift1(s) << 16);
@@ -73,16 +72,16 @@ inline void action_lift_open_down(int lift_no, state &s){
 }
 
 inline void observation_floor_up(int flr, state &s){
-	s |= (1 << (16 + (1 << flr)));
+	s |= (1 << (16 + flr));
 }
 
 inline void observation_floor_down(int flr, state &s){
-	s |= (1 << (21 + (1 << flr)));
+	s |= (1 << (21 + flr));
 }
 
 inline void observation_lift_press(int lift_no, int flr, state &s){
-	if(lift_no == 1) s |= (1 << (6 + (1 << flr)));
-	else s |= (1 << (11 + (1 << flr)));
+	if(lift_no == 1) s |= (1 << (6 + flr));
+	else s |= (1 << (11 + flr));
 }
 
 // ********************* ACCESSING DATA

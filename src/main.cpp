@@ -4,20 +4,34 @@
 int N, K;
 float p, q, r, t;
 unordered_map<state, state_vars> m;
+int total_explored_states = 0;
 
 int main(int argc, char const *argv[])
 {
 	// cin >> N >> K >> p >> q >> r >> t;
+	N = 5;
+	K = 2;
+	p = 0.7;
+	q = 0.25;
+	r = 0.25;
 	
 	state start_state = 0;
 	print(start_state);
-	string x = "B_1_2";
-	auto pos1 = x.find('_') + 1;
-	auto pos2 = x.find('_', pos1);
-	cout << (x.substr(pos2+1)) << endl;
-	cout << (x.substr(pos1, pos2-pos1)) << endl;
+	manage_simulation();
 
-	auto temp = map(start_state);
+	// observation_floor_up(1, start_state);
+	// observation_floor_down(1,start_state);
+	// // observation_floor_down(3, start_state);
+	// // observation_floor_down(3, start_state);
+	// // observation_lift_press(2, 2, start_state);
+	// action_lift_up(2, start_state);
+	// // action_lift_up(2, start_state);
+	// // action_lift_down(2, start_state);
+	// action_lift_open_up(2,start_state);
+	// observation_lift_press(2,2,start_state);
+	// action_lift_up(2,start_state);
+	// // action_lift_open_up(2,start_state);
+	// print(start_state);
 
 	return 0;
 }

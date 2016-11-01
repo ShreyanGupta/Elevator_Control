@@ -41,17 +41,17 @@ void update_state(string s, state &st){
 	else if(s[0] == 'B'){
 		switch(s[1]){
 			case 'U' : {
-				observation_floor_up(stoi(s.substr(3)), st);
+				observation_floor_up(stoi(s.substr(3)) - 1, st);
 				break;
 			}
 			case 'D' : {
-				observation_floor_down(stoi(s.substr(3)), st);
+				observation_floor_down(stoi(s.substr(3)) - 1, st);
 				break;
 			}
 			default : {
 				auto pos1 = s.find('_') + 1;
 				auto pos2 = s.find('_', pos1);
-				observation_lift_press(stoi(s.substr(pos2+1)), stoi(s.substr(pos1, pos2-pos1)), st);
+				observation_lift_press(stoi(s.substr(pos2+1)), stoi(s.substr(pos1, pos2-pos1)) - 1, st);
 				break;
 			}
 		}
@@ -62,7 +62,7 @@ void parse_response(string s, state &st){
 	auto ptr = s.begin();
 	while(ptr != s.end()){
 		string temp;
-		while(*ptr != ' '){
+		while(ptr != s.end() && *ptr != ' '){
 			temp += *ptr;
 			++ptr;
 		}
@@ -74,10 +74,10 @@ void parse_response(string s, state &st){
 string action_to_string(pair<int, int> &act){
 	string str_action;
 	switch(act.first){
-		case 0 : str_action += "AU1"; break;
-		case 1 : str_action += "AD1"; break;
-		case 2 : str_action += "AOU1"; break;
-		case 3 : str_action += "AOD1"; break;
+		case 0 : str_action += "AU1 "; break;
+		case 1 : str_action += "AD1 "; break;
+		case 2 : str_action += "AOU1 "; break;
+		case 3 : str_action += "AOD1 "; break;
 	}
 	switch(act.second){
 		case 0 : str_action += "AU2"; break;
@@ -92,6 +92,8 @@ state_vars &map(state &s){
 	auto itr = m.find(s);
 	if(itr == m.end()){
 		itr = m.insert(make_pair(s, state_vars(s))).first;
+		// ++total_explored_states;
+		// cout << total_explored_states << endl;
 	}
 	return itr->second;
 }

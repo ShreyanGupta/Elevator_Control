@@ -21,5 +21,6 @@ struct state_vars;
 extern const float INVALID;
 extern int N, K;
 extern float p, q, r, t;
+extern int total_explored_states;
 
 #endif

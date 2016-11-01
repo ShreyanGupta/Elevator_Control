@@ -274,7 +274,7 @@ void simulator::get_state_details()
 
 	for(int i = 0; i<k; i++)
 	{
-		cout<<"LIFT "<<i+1<<": "<<elevators[i].get_person_count()<<" people at "<<elevators[i].floor<<endl;
+		cout<<"LIFT "<<i+1<<": "<<elevators[i].get_person_count()<<" people at "<<(elevators[i].floor + 1)<<endl;
 	}
 }
 

@@ -32,7 +32,7 @@ struct state_vars{
 };
 
 void simulate(int depth);
-void manage_simulations();
+void manage_simulation();
 
 extern unordered_map<state, state_vars> m;
 
