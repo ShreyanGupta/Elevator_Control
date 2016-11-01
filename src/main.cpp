@@ -7,6 +7,7 @@ unordered_map<state, state_vars> m;
 int main(int argc, char const *argv[])
 {
 	// cin >> N >> K >> p >> q >> r >> t;
+	
 	state start_state = 0;
 	print_state(start_state);
 	string x = "B_1_2";
@@ -19,3 +20,9 @@ int main(int argc, char const *argv[])
 
 	return 0;
 }
+
+
+// Construct simulator
+// Call that function D times
+// Last mein get that vector of costs
+// And then update them

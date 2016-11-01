@@ -57,6 +57,36 @@ void update_state(string s, state &st){
 	}
 }
 
+void parse_response(string s, state &st){
+	auto ptr = s.begin();
+	while(ptr != s.end()){
+		string temp;
+		while(*ptr != ' '){
+			temp += *ptr;
+			++ptr;
+		}
+		update_state(temp, st);
+		if(ptr != s.end()) ++ptr;
+	}
+}
+
+string action_to_string(pair<int, int> &act){
+	string str_action;
+	switch(act.first){
+		case 0 : str_action += "AU1"; break;
+		case 1 : str_action += "AD1"; break;
+		case 2 : str_action += "AOU1"; break;
+		case 3 : str_action += "AOD1"; break;
+	}
+	switch(act.second){
+		case 0 : str_action += "AU2"; break;
+		case 1 : str_action += "AD2"; break;
+		case 2 : str_action += "AOU2"; break;
+		case 3 : str_action += "AOD2"; break;
+	}
+	return str_action;
+}
+
 state_vars &map(state &s){
 	auto itr = m.find(s);
 	if(itr == m.end()){

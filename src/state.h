@@ -35,6 +35,9 @@ int floor_up_down(state s);
 
 void print(state s);
 void update_state(string s, state &st);
+void parse_response(string s, state &st);
+string action_to_string(pair<int, int> &act);
+state_vars &map(state &s);
 
 // ******************** ACTIONS ON STATES
 
