@@ -1,7 +1,7 @@
 CFLAGS = g++ -c -std=c++11 -Ofast -march=native -g
 LFLAGS = g++ -std=c++11 -Ofast -march=native -g -o out
 
-OBJS = state_vars.o state.o main.o
+OBJS = state_vars.o state.o main.o simulator.o
 
 out : $(OBJS)
 	$(LFLAGS) $(OBJS)
@@ -14,6 +14,9 @@ state.o : state.cpp state.h header.h state_vars.h
 
 state_vars.o : state_vars.cpp state.h header.h state_vars.h
 	$(CFLAGS) state_vars.cpp
+
+simulator.o : simulator.cpp simulator.h header.h
+	$(CFLAGS) simulator.cpp
 
 clean :
 	rm *.o

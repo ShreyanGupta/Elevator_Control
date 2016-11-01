@@ -34,4 +34,6 @@ struct state_vars{
 void simulate(int depth);
 void manage_simulations();
 
+extern unordered_map<state, state_vars> m;
+
 #endif

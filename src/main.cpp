@@ -1,4 +1,5 @@
 #include "state.h"
+#include "state_vars.h"
 
 int N, K;
 float p, q, r, t;
@@ -9,7 +10,7 @@ int main(int argc, char const *argv[])
 	// cin >> N >> K >> p >> q >> r >> t;
 	
 	state start_state = 0;
-	print_state(start_state);
+	print(start_state);
 	string x = "B_1_2";
 	auto pos1 = x.find('_') + 1;
 	auto pos2 = x.find('_', pos1);

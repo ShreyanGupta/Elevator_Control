@@ -1,6 +1,6 @@
 #include "state_vars.h"
 #include "state.h"
-#include "simulator"
+#include "simulator.h"
 
 const float INVALID = +10000000;
 
@@ -161,6 +161,11 @@ pair<int,int> state_vars::best_actions(){
 	for(int i=0; i<4; ++i){
 		for(int j=0; j<4; ++j){
 			if(Q[i][j] == INVALID) continue;
+			if(num_actions[i][j] == 0){
+				action.first = i;
+				action.second = j;
+				return action;
+			}
 			float temp = Q[i][j] - Q_avg * sqrt(2*log(num_total_actions) / num_actions[i][j]);
 			if(temp < best_val){
 				best_val = temp;
@@ -176,8 +181,8 @@ pair<int,int> state_vars::best_actions(){
 void state_vars::update_action(pair<int, int> &a, float cost){
 	++num_actions[a.first][a.second];
 	++num_total_actions;
-	Q_avg += cost / num_total_actions;
-	Q[a.first][a.second] += cost / num_actions[a.first][a.second];
+	Q_avg += (cost - Q_avg) / num_total_actions;
+	Q[a.first][a.second] += (cost - Q[a.first][a.second]) / num_actions[a.first][a.second];
 }
 
 // *************************** NON State vars functions
@@ -186,7 +191,7 @@ void simulate(int depth){
 	simulator sim(N, K, p, q, r);
 	vector <pair<state, pair<int, int> > > action_list;
 	state s = 0;
-	parse_response(parse_and_take_action("0"), s);
+	parse_response(sim.parse_and_take_action("0"), s);
 	for(int i=0; i<depth; ++i){
 		auto action = map(s).best_actions();
 		action_list.push_back(make_pair(s, action));

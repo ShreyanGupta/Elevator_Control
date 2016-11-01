@@ -1,4 +1,5 @@
 #include "state.h"
+#include "state_vars.h"
 
 string to_bin(int n){
 	string r;

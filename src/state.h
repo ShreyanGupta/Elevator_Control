@@ -51,6 +51,7 @@ inline void action_lift_down(int lift_no, state &s){
 	else s -= 8;
 }
 
+// to be checked properly
 inline void action_lift_open_up(int lift_no, state &s){
 	if(lift_no == 1){
 		s &= ~(floor_lift1(s) << 16);
