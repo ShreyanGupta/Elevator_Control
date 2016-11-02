@@ -248,6 +248,20 @@ string get_action(){
 
 // ***************************************************
 
+string get_observation()
+{
+	char obs[1000];
+
+	cin.getline(obs,1000);
+	string observe = "";
+	for(int i = 0; obs[i] != '\0'; i++)
+	{
+		observe+=obs[i];
+	}
+
+	return obs;
+}
+
 int main(int argc, char const *argv[])
 {
 	// cin >> N >> K >> p >> q >> r >> t;
@@ -263,19 +277,16 @@ int main(int argc, char const *argv[])
 	vector<bool> floor_down(N, false);
 	vector< vector<bool> > button_lift(K, vector<bool>(N, false));
 
-
-
-
-
-
-	take_action("0");
-	get_observation();
-	update_state();
+	// take_action("0");
+	cout<<"0"<<endl;
+	string str = get_observation();
+	update_state(str);
 	while(ongoing episodes){
-		get_action();
-		update_state();
-		get_observation();
-		update_state();
+		string act = get_action();
+		update_state(act);
+		cout<<act<<endl;
+		string get_obs = get_observation();
+		update_state(get_obs);
 	}
 
 	return 0;
