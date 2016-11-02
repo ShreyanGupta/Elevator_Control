@@ -188,6 +188,8 @@ pair<int,int> state_vars::best_actions(){
 				return action;
 			}
 			float temp = Q[i][j] - Q_avg * sqrt(2*log(num_total_actions) / num_actions[i][j]);
+			// float temp = Q[i][j]*(1 - sqrt(2*log(num_total_actions) / num_actions[i][j]));
+			// float temp = Q[i][j] - Q_avg * sqrt(2*sqrt(num_total_actions) / num_actions[i][j]);
 			if(temp < best_val){
 				best_val = temp;
 				action.first = i;
@@ -198,87 +200,80 @@ pair<int,int> state_vars::best_actions(){
 	return action;
 }
 
+pair<int,int> state_vars::the_best_action(){
+	pair<int, int> action = make_pair(-1,-1);
+	float best_val = INVALID;
+	for(int i=0; i<4; ++i){
+		for(int j=0; j<4; ++j){
+			if(Q[i][j] == INVALID) continue;
+			if(num_actions[i][j] == 0){
+				cout << "UNEXPLORED!!!!\n";
+				action.first = i;
+				action.second = j;
+				return action;
+			}
+			if(Q[i][j] < best_val){
+				best_val = Q[i][j];
+				action.first = i;
+				action.second = j;
+			}
+		}
+	}
+	if(action.first == -1) cout << "EEEEEEEEEEERRRRRRRRRROOOOOOOOOOORRRRRRRRRRRRRRR!!!!!!!!!!!!!\n";
+	return action;
+}
+
 // verify this function
 void state_vars::update_action(pair<int, int> &a, float cost){
-	if(num_total_actions > 1000000)
-	{
-		cout << "OVERFLOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-	}
 	++num_actions[a.first][a.second];
 	++num_total_actions;
 	Q_avg += (cost - Q_avg) / num_total_actions;
 	Q[a.first][a.second] += (cost - Q[a.first][a.second]) / num_actions[a.first][a.second];
-
-	// for(int i=0; i<4; ++i){
-	// 	for(int j=0; j<4; ++j){
-	// 		if(Q[i][j] == INVALID) continue;
-	// 		cout << Q[i][j] << "\t" << num_actions[i][j] << "\t";
-	// 	}
-	// }
-	// cout << endl;
 	// printf("Action %d %d Q_av %f N_t %d Q %f N %d\n", a.first, a.second, Q_avg, num_total_actions, Q[a.first][a.second], num_actions[a.first][a.second]);
 }
 
 // *************************** NON State vars functions
 
-void simulate(int depth){
+void simulate(int depth, bool actual){
 	simulator sim(N, K, p, q, r);
 	vector <pair<state, pair<int, int> > > action_list;
 	state s = 0;
 	string response = sim.parse_and_take_action("0");
 	parse_response(response, s);
-		// cout << "!!!!!!!!!!" << response << endl;
-		// sim.get_state_details();
+		if(actual) sim.get_state_details();
+		if(actual) cout << "!!!!!!!!!!" << response << endl;
 	for(int i=0; i<depth; ++i){
-			// print(s);
-		auto action = map(s).best_actions();
+			if(actual) print(s);
+		pair<int,int> action = map(s).best_actions(); 
 		string str_action = action_to_string(action);
 		action_list.push_back(make_pair(s, action));
 		
 		parse_response(str_action, s);
-			// cout << str_action << endl;
-			// sim.get_state_details();
+			if(actual) sim.get_state_details();
+			if(actual) cout << str_action << endl;
 		string response = sim.parse_and_take_action(str_action);
-			// cout << "!!!!!!!!!!" << response << endl;
+			if(actual) cout << "!!!!!!!!!!" << response << endl;
 		parse_response(response, s);
 	}
 	auto cost_list = sim.get_cost_vector();
 
 	for(int i=0; i<depth; ++i){
-		// if(i==1){
-		// 	for(int x=0; x<4; ++x){
-		// 		for(int y=0; y<4; ++y){
-		// 			if(map(action_list[i].first).Q[x][y] == INVALID) continue;
-		// 			cout << map(action_list[i].first).num_actions[x][y] << "\t" << map(action_list[i].first).Q[x][y] << "\t";
-		// 		}
-		// 	}
-		// 	cout << endl;
-		// }
-		// cout << cost_list[i] << endl;
-		// print(action_list[i].first);
-		map(action_list[i].first).update_action(action_list[i].second, cost_list[i] / (i+1));
+		// map(action_list[i].first).update_action(action_list[i].second, cost_list[i] / (i+1));
+		map(action_list[i].first).update_action(action_list[i].second, cost_list[depth-1] / depth);
 	}
 	cout << (cost_list[depth - 1] / depth) << endl;
 }
 
 void manage_simulation(){
 	time_t start = time(0);
-	int depth = 1000;
-	// int count = 5;
-	// while(time(0) - start < 30*60*60){
-
-	// 	simulate(depth);
-	// }
-	int count = 0;
-	while(depth <= 100000)
+	int depth = 500;
+	while(time(0) - start < 60)
 	{
-		if (count % 5 == 0)
-		{
-			// depth+=5;
-			count = 0;
-		}
-		simulate(depth);
-		count++;
+		simulate(depth, false);
+	}
+	cout << "ACTUAL\n";
+	for(int i=0; i<1; ++i){
+		simulate(30, true);
 	}
 }
 

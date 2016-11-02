@@ -16,7 +16,6 @@ struct state_vars{
 	int num_actions[4][4];
 	int num_total_actions;
 	
-	// verify constraints
 	void validate_actions(int s);
 	void constraint_base_flr(int s);
 	void constraint_top_flr(int s);
@@ -25,9 +24,8 @@ struct state_vars{
 	void constraint_move_down_lift(int s);
 	
 	state_vars(int);
-	// verify this function
 	pair<int, int> best_actions();
-	// verify this function
+	pair<int, int> the_best_action();
 	void update_action(pair<int, int> &a, float cost);
 };
 
