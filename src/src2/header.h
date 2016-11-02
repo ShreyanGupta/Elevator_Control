@@ -43,6 +43,7 @@ void update_lift_state(int lift_num);
 string get_action();
 string get_lift_action(int lift_num);
 
+string get_observation();
 
 #endif
 
