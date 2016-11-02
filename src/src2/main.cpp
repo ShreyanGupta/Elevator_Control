@@ -453,7 +453,7 @@ string vella_action3(int lift_num){
 		if(nearest > dist || (nearest == dist && lift > lift_num)) best_up_flr_down = dist;
 	}
 
-	fprintf(stderr, "L%d best_down_flr_up %d best_down_flr_down %d best_up_flr_down %d best_up_flr_up %d\n", lift_num, best_down_flr_up, best_down_flr_down, best_up_flr_down, best_up_flr_up);
+	// fprintf(stderr, "L%d best_down_flr_up %d best_down_flr_down %d best_up_flr_down %d best_up_flr_up %d\n", lift_num, best_down_flr_up, best_down_flr_down, best_up_flr_down, best_up_flr_up);
 
 	int minnest = min(min(min(best_down_flr_down, best_down_flr_up), best_up_flr_up), best_up_flr_down);
 	if(minnest == 10000) return "AS"+x;
@@ -551,7 +551,7 @@ int main(int argc, char const *argv[])
 	string str = get_observation();
 	update_state(str);
 	while(true){
-		cerr << "Episode " << (++counter) << endl;
+		// cerr << "Episode " << (++counter) << endl;
 		string act = get_action();
 		update_state(act);
 		cout<<act<<endl;
